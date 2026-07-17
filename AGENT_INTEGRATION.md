@@ -12,7 +12,7 @@ args:
   - path/to/mcp_server.py
 ```
 
-### Hermes Agent
+### Example: Hermes Agent
 ```bash
 hermes mcp add skill-router --command python --args "path/to/mcp_server.py"
 ```
@@ -35,7 +35,7 @@ After any task (5+ tool calls):
 2. Skip for single-tool operations.
 ```
 
-### Hermes Agent
+### Example: Hermes Agent
 **File**: `~/.hermes/SOUL.md` — slot #1 in system prompt (agent identity)  
 **DO NOT use `platform_hints`** — it's a footnote, models ignore it.
 
@@ -125,7 +125,7 @@ echo "[]" > ~/.hermes/.router-cache/routing_history.json
 ```
 
 ### MCP Server Cache
-`_SKILLS_CACHE` is process-global. New skills are invisible until MCP process restarts (new Hermes session or `/reset`).
+`_SKILLS_CACHE` is process-global. New skills are invisible until MCP process restarts (a new session or `/reset`).
 
 ---
 
@@ -141,7 +141,7 @@ echo "[]" > ~/.hermes/.router-cache/routing_history.json
 
 ## ⚠️ Critical Notes
 
-- **Hermes: Use SOUL.md, NOT platform_hints** — footnote is invisible to models
+- **Hermes specifically: Use SOUL.md, NOT platform_hints** — footnote is invisible to models
 - **Instruction format must be model-agnostic** — no DeepSeek-specific `CRITICAL STANDING INSTRUCTION` directives. Simple numbered lists work across all models.
 - **Both `route_skills` AND `record_outcome` must be called** — routing without feedback decays to neutral (0.5) and never improves.
 - **Restart after skill additions** — MCP server caches skill list in memory.

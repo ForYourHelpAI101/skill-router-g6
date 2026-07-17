@@ -1,6 +1,6 @@
 ---
 name: skill-router-g1
-description: G5 research-optimized skill router — InF-IR expansion, Sinkhorn OT matching, DPP diversity, Thompson sampling, ε-auction, category diversity. Picks best Hermes skills for any task.
+description: G5 research-optimized skill router — InF-IR expansion, Sinkhorn OT matching, DPP diversity, Thompson sampling, ε-auction, category diversity. Picks the best skills for any task.
 version: G5
 ---
 

@@ -5,7 +5,7 @@ Self-learning skill router for AI agents. Model-agnostic MCP server.
 ## Quick Start
 
 ```bash
-# Hermes Agent
+# Example: Hermes Agent
 hermes mcp add skill-router --command python --args "path/to/mcp_server.py"
 ```
 
