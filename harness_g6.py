@@ -168,50 +168,11 @@ def rag_history(query: str, history: list, top_k: int = 3) -> list:
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# KEYWORD PATTERNS — G5 bank (140+ patterns)
+# KEYWORD PATTERNS — user-defined domain→skill mappings (add your own)
 # ─────────────────────────────────────────────────────────────────────────────
 PATTERNS = [
-    (["kubernetes","k8s","aks","gke","eks"], ["azure-kubernetes","cloud-gpu","helm"]),
-    (["terraform","iac","cloudformation"], ["terraform","azure-deploy","infrastructure-as-code"]),
-    (["docker","container","compose"], ["docker","containerization"]),
-    (["ci/cd","pipeline","github actions","jenkins"], ["ci-cd","github-actions"]),
-    (["azure"], ["azure-deploy","azure-kubernetes"]),
-    (["aws","ec2","lambda","s3"], ["aws-deploy","serverless"]),
-    (["gcp","google cloud","firebase"], ["google-cloud","firebase-basics"]),
-    (["serverless","function","faas"], ["serverless","cloud-functions"]),
-    (["ansible","playbook","provision"], ["ansible","configuration-management"]),
-    (["monitoring","prometheus","grafana"], ["prometheus","grafana","monitoring"]),
-    (["datadog","dd","apm","trace"], ["datadog-skills","dd-apm"]),
-    (["logging","elk","log"], ["logging","dd-logs"]),
-    (["security","vuln","cve","pentest"], ["security-audit","vulnerability-scan"]),
-    (["auth","oauth","jwt","saml","sso"], ["authentication","oauth-implementation"]),
-    (["secret","vault","credential"], ["secrets-management","vault"]),
-    (["machine learning","ml","model","train","pytorch","tensorflow"], ["ml-training","pytorch-basics"]),
-    (["data pipeline","etl","airflow","spark"], ["data-pipeline","etl-automation"]),
-    (["database","sql","postgres","mysql","sqlite"], ["database-management","sql-queries"]),
-    (["vector","embedding","rag","faiss","chroma"], ["vector-database","rag-implementation"]),
-    (["llm","gpt","claude","ollama","fine-tun"], ["llm-integration","ollama-setup"]),
-    (["pandas","dataframe","csv","data clean"], ["data-analysis","pandas-operations"]),
-    (["api","rest","graphql","fastapi","flask"], ["api-development","rest-api"]),
-    (["web scrape","crawl","scraping","playwright"], ["web-scraping","playwright-automation"]),
-    (["frontend","react","vue","nextjs","html","css"], ["frontend-development","react-components"]),
-    (["nginx","reverse proxy","load balancer"], ["nginx-config","load-balancing"]),
-    (["python","pip","venv","poetry"], ["python-basics","python-packaging"]),
-    (["git","branch","merge","commit","github"], ["git-operations","github-workflow"]),
-    (["debug","stack trace","error","exception"], ["debugging","error-analysis"]),
-    (["test","pytest","unittest","tdd","mock"], ["testing-strategy","pytest-patterns"]),
-    (["refactor","code review","clean code","lint"], ["code-review","refactoring-patterns"]),
-    (["pdf","word","docx","convert","extract text"], ["pdf-processing","document-conversion"]),
-    (["markdown","readme","documentation"], ["documentation-writing","readme-generator"]),
-    (["json","yaml","config","parse"], ["config-management","json-processing"]),
-    (["automate","workflow","schedule","cron"], ["task-automation","cron-jobs"]),
-    (["agent","tool use","mcp","hermes skill"], ["agent-design","mcp-integration"]),
-    (["email","gmail","smtp","outlook"], ["email-automation","gmail-integration"]),
-    (["telegram","discord","slack","notify"], ["messaging-integration","notification-system"]),
-    (["voicemail","tradie","transcribe","asr","stt","whisper"], ["speech-to-text","audio-transcription"]),
-    (["nz","new zealand","maori","telnyx"], ["telnyx-integration","nz-telephony"]),
-    (["droplet","digitalocean","do"], ["digitalocean-management","linux-ops"]),
-    (["deploy","ship","release","scp"], ["deployment-automation","remote-deployment"]),
+    # Format: (["keyword1","keyword2"], ["skill-name-1","skill-name-2"]),
+    # Skills are validated against the handbook — only real skills pass through.
 ]
 
 def quick_match(text: str) -> list:
@@ -381,7 +342,7 @@ def record_outcome(query: str, skills_used: list, success: bool):
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# AGENT HOOK — pre_llm_call + post_task_complete
+# HERMES HOOK — pre_llm_call + post_task_complete
 # ─────────────────────────────────────────────────────────────────────────────
 def hook_main():
     try:
