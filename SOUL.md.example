@@ -1,0 +1,15 @@
+# For: Hermes Agent  (~/.hermes/SOUL.md)
+# For: Claude Code    (~/.claude/CLAUDE.md)
+# For: Cursor         (.cursorrules)
+# For: Codex          (CODEX.md)
+# For: any agent      (your instruction file)
+
+## Router (MANDATORY — all models)
+Before replying to any substantive user message (not a correction or trivial reply):
+1. Call `mcp__skill_router__route_skills` with the user's query.
+2. Show the top 5 skills on one line: 🎯 Router: skill-a, skill-b, skill-c, skill-d, skill-e
+3. If the call fails, continue silently.
+
+After completing any task (5+ tool calls):
+1. Call `mcp__skill_router__record_outcome` with: query, skills used (comma-separated), success=true/false.
+2. Skip for single-tool operations.
