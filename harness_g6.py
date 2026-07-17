@@ -252,8 +252,10 @@ def rank_by_body(query: str, skills: list, top_k: int = 20) -> list:
     qtoks = set(re.findall(r'\b\w{3,}\b', query.lower()))
     if not qtoks:
         return skills[:top_k]
+    handbook = _load_json(HANDBOOK_PATH, {})
     scored = sorted([(body_score(qtoks, sk), sk) for sk in skills], key=lambda x: -x[0])
-    return [sk for s, sk in scored[:top_k] if s > 0] or skills[:top_k]
+    # Only return skills that exist in the handbook (anti-hallucination)
+    return [sk for s, sk in scored[:top_k] if s > 0 and sk.name in handbook] or [sk for sk in skills[:top_k] if sk.name in handbook]
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -328,6 +330,8 @@ def route_g6(query: str, k: int = 5, explain: bool = False):
     # Self-exclusion: don't recommend the router itself
     ranked = [s for s in ranked if s != 'skill-router']
     final = dpp_greedy(ranked, k=k * 2)[:k]
+    # FINAL GATE: drop anything not in the handbook — last line of defense
+    final = [s for s in final if s in handbook]
 
     elapsed = int((time.time() - t0) * 1000)
     explanation = ""
