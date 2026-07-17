@@ -9,7 +9,7 @@ Papers informing the design:
 
 Implementation: 6-stage linear pipeline
   A. RAG history match — token-overlap similarity against past successful routings
-  B. Keyword patterns — user-defined domain→skill mappings (empty by default)
+  B. Keyword patterns — 140+ hand-crafted domain→skill mappings
   C. Full-body BM25 — reads SKILL.md body text (SkillRouter finding)
   D. Thompson sampling — Beta posterior per skill for exploration/exploitation
   E. Skill Handbook — competence tracking per skill with domain awareness (SkillOrchestra)
@@ -34,7 +34,7 @@ from typing import Optional
 # ─────────────────────────────────────────────────────────────────────────────
 # PATHS
 # ─────────────────────────────────────────────────────────────────────────────
-ROUTER_DIR    = Path(__file__).parent  # change to your install path
+ROUTER_DIR    = Path(__file__).parent
 SKILLS_HOME   = Path(os.path.expandvars(r"%APPDATA%")).parent / "Local" / "hermes"
 SKILLS_DIR    = SKILLS_HOME / "skills"
 CACHE_DIR     = SKILLS_HOME / ".router-cache"
@@ -383,7 +383,7 @@ def hook_main():
     if not skills:
         print(json.dumps({})); return
 
-    context = f"[Skill-Router G6] Recommended skills: {', '.join(skills)}"
+    context = f"🎯 Router: {skills[0]} (also: {', '.join(skills[1:5])})"
     print(json.dumps({"context": context}))
 
 
