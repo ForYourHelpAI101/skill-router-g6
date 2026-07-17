@@ -9,7 +9,7 @@ Papers informing the design:
 
 Implementation: 6-stage linear pipeline
   A. RAG history match — token-overlap similarity against past successful routings
-  B. Keyword patterns — 140+ hand-crafted domain→skill mappings
+  B. Keyword patterns — user-defined domain→skill mappings (empty by default)
   C. Full-body BM25 — reads SKILL.md body text (SkillRouter finding)
   D. Thompson sampling — Beta posterior per skill for exploration/exploitation
   E. Skill Handbook — competence tracking per skill with domain awareness (SkillOrchestra)

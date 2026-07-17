@@ -1,6 +1,6 @@
 """
 Skill Router G6 — MCP Server
-Exposes G6 routing as MCP tools for Claude Desktop.
+Exposes G6 routing as MCP tools for any MCP host.
 
 Tools:
   route_skills(query, k=5)     — returns best skill names for a query
@@ -10,7 +10,7 @@ Tools:
 """
 
 import json, sys, os
-sys.path.insert(0, r"C:\Skill-Router G1")
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from harness_g6 import route_g6, record_outcome, _load_json, _save_json
 from harness_g6 import HANDBOOK_PATH, HISTORY_PATH, POSTERIOR_PATH

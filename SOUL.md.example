@@ -1,15 +1,12 @@
-# For: Hermes Agent  (~/.hermes/SOUL.md)
-# For: Claude Code    (~/.claude/CLAUDE.md)
-# For: Cursor         (.cursorrules)
-# For: Codex          (CODEX.md)
-# For: any agent      (your instruction file)
+# Drop-in instruction file for any agent
+# Hermes:  ~/.hermes/SOUL.md
+# Claude:  ~/.claude/CLAUDE.md
+# Cursor:  .cursorrules
+# Codex:   CODEX.md
 
-## Router (MANDATORY — all models)
-Before replying to any substantive user message (not a correction or trivial reply):
-1. Call `mcp__skill_router__route_skills` with the user's query.
-2. Announce the skill you intend to use — the FIRST result is your pick
-3. If the call fails, continue silently.
+## Router (HARNESS-INJECTED — do not call route_skills)
+The harness injects a 🎯 Router: line before every turn. Display it EXACTLY as provided at the very start of your response.
 
-After completing any task (5+ tool calls):
-1. Call `mcp__skill_router__record_outcome` with: query, skills used (comma-separated), success=true/false.
+After any task (5+ tool calls):
+1. Call mcp__skill_router__record_outcome with: query, skills, success=true/false.
 2. Skip for single-tool operations.

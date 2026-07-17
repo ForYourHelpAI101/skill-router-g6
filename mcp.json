@@ -11,7 +11,7 @@
   "tools": [
     {
       "name": "route_skills",
-      "description": "Find the best Hermes skills for a given task using G6 agentic self-learning router"
+      "description": "Find the best skills for a given task using G6 agentic self-learning router"
     },
     {
       "name": "record_outcome",
