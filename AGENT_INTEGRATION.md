@@ -2,88 +2,82 @@
 
 Force-integrate skill routing + self-learning feedback into any AI coding agent. Model-agnostic — works with DeepSeek, Claude, GPT, Gemini, Llama, Qwen, and all others.
 
+Two integration modes:
+
+| Mode | How | Best for |
+|------|-----|----------|
+| **Harness (Ralph Loop)** | `pre_llm_call` hook injects routing | Hermes — zero model compliance needed |
+| **MCP Tool** | Model calls `route_skills` itself | Claude Code, Cursor, Codex, all others |
+
 ---
 
-## MCP Server Config (stdin/stdout JSON-RPC)
+## Mode 1: Harness Injection (Hermes — recommended)
 
+The harness does the routing. The model just displays the result.
+
+### 1. Wire the hook
 ```yaml
-command: python  # or full path to python3/python.exe
-args:
-  - path/to/mcp_server.py
+# config.yaml
+hooks:
+  pre_llm_call:
+    - command: "path/to/hermes_hook.py"
 ```
 
-### Example: Hermes Agent
-```bash
-hermes mcp add skill-router --command python --args "path/to/mcp_server.py"
+### 2. Instruction file
 ```
-
----
-
-## Force Embed Per Agent
-
-### The Instruction Text — Model-Agnostic (copy-paste into your instruction file)
-
-```
-## Router (MANDATORY)
-Before replying to any substantive user message (not a correction or trivial reply):
-1. Call mcp__skill_router__route_skills with the user's query.
-2. Announce the skill you intend to use — the FIRST result is your pick
-3. If the call fails, continue silently. .
+## Router (HARNESS-INJECTED — do not call route_skills)
+The harness injects a 🎯 Router: line before every turn. Display it EXACTLY as provided at the very start of your response.
 
 After any task (5+ tool calls):
-1. Call mcp__skill_router__record_outcome with: query, skills used, success=true/false.
+1. Call mcp__skill_router__record_outcome with: query, skills, success=true/false.
 2. Skip for single-tool operations.
 ```
 
-### Example: Hermes Agent
-**File**: `~/.hermes/SOUL.md` — slot #1 in system prompt (agent identity)  
-**DO NOT use `platform_hints`** — it's a footnote, models ignore it.
-
-### Claude Code
-**MCP**: `claude mcp add skill-router`  
-**File**: `~/.claude/CLAUDE.md` or project `CLAUDE.md`
-
-### Cursor
-**MCP**: `.cursor/mcp.json`  
-**File**: `.cursorrules`
-
-### Codex (OpenAI)
-**MCP**: `codex mcp add skill-router`  
-**File**: `CODEX.md`
-
-### Windsurf
-**MCP**: `.windsurf/mcp.json`  
-**File**: `.windsurfrules`
-
-### Gemini CLI
-**MCP**: `.gemini/mcp.json`  
-**File**: `GEMINI.md`
-
-### Aider
-**File**: `AIDER.md` / `CONVENTIONS.md`
-
-### Cline / Continue
-**File**: `.clinerules` / `.continuerules`
-
-### GitHub Copilot
-**File**: `.github/copilot-instructions.md`
+This is a **Ralph Loop** — the hook runs outside the model's control. It calls `route_skills`, injects the result as context, and the model cannot skip it. No MCP call, no hallucination, no instruction drift.
 
 ---
 
-## Quick Reference
+## Mode 2: MCP Tool (all other agents)
 
-| Agent | MCP Config | Instruction File | Slot |
-|-------|-----------|-----------------|------|
-| Hermes | `config.yaml` | `~/.hermes/SOUL.md` | Identity #1 |
-| Claude Code | `.mcp.json` | `CLAUDE.md` | Identity #1 |
-| Cursor | `.cursor/mcp.json` | `.cursorrules` | Always |
-| Codex | `~/.codex/mcp.json` | `CODEX.md` | Identity |
-| Windsurf | `.windsurf/mcp.json` | `.windsurfrules` | Always |
-| Gemini CLI | `.gemini/mcp.json` | `GEMINI.md` | Identity |
-| Aider | config | `AIDER.md` | Identity |
-| Cline | VS Code ext | `.clinerules` | Always |
-| Continue | VS Code ext | `.continuerules` | Always |
-| Copilot | N/A | `.github/copilot-instructions.md` | Always |
+The model calls `route_skills` directly.
+
+### 1. Add MCP server
+```bash
+# Claude Code
+claude mcp add skill-router --command python --args "path/to/mcp_server.py"
+
+# Cursor / Windsurf / Codex — edit .mcp.json
+```
+
+### 2. Instruction file
+```
+## Router (MANDATORY)
+Before replying to any substantive message:
+1. Call mcp__skill_router__route_skills with the user's query.
+2. Show: 🎯 Router: primary-skill (also: alt-1, alt-2, alt-3, alt-4)
+3. If the call fails, continue silently.
+
+After any task (5+ tool calls):
+1. Call mcp__skill_router__record_outcome with: query, skills, success=true/false.
+2. Skip for single-tool operations.
+```
+
+---
+
+## Per-Agent Setup
+
+| Agent | Mode | Config | Instruction File | Slot |
+|-------|------|--------|-----------------|------|
+| Hermes | Harness | `config.yaml` hooks | `~/.hermes/SOUL.md` | Identity #1 |
+| Claude Code | MCP | `.mcp.json` | `CLAUDE.md` | Identity #1 |
+| Cursor | MCP | `.cursor/mcp.json` | `.cursorrules` | Always |
+| Codex | MCP | `~/.codex/mcp.json` | `CODEX.md` | Identity |
+| Windsurf | MCP | `.windsurf/mcp.json` | `.windsurfrules` | Always |
+| Gemini CLI | MCP | `.gemini/mcp.json` | `GEMINI.md` | Identity |
+| Aider | MCP | config | `AIDER.md` | Identity |
+| Cline | MCP | VS Code ext | `.clinerules` | Always |
+| Continue | MCP | VS Code ext | `.continuerules` | Always |
+| Copilot | MCP | N/A | `.github/copilot-instructions.md` | Always |
 
 ---
 
@@ -125,7 +119,7 @@ echo "[]" > ~/.hermes/.router-cache/routing_history.json
 ```
 
 ### MCP Server Cache
-`_SKILLS_CACHE` is process-global. New skills are invisible until MCP process restarts (a new session or `/reset`).
+`_SKILLS_CACHE` is process-global. New skills are invisible until the MCP process restarts (new session or `/reset`).
 
 ---
 
@@ -143,7 +137,7 @@ echo "[]" > ~/.hermes/.router-cache/routing_history.json
 
 ## ⚠️ Critical Notes
 
-- **Hermes specifically: Use SOUL.md, NOT platform_hints** — footnote is invisible to models
-- **Instruction format must be model-agnostic** — no DeepSeek-specific `CRITICAL STANDING INSTRUCTION` directives. Simple numbered lists work across all models.
-- **Both `route_skills` AND `record_outcome` must be called** — routing without feedback decays to neutral (0.5) and never improves.
-- **Restart after skill additions** — MCP server caches skill list in memory.
+- **Harness mode is preferred** — no model compliance, no instruction drift, zero hallucination risk
+- **Instruction format must be model-agnostic** — simple numbered lists work across all models
+- **Both `route_skills` AND `record_outcome` must be called** — routing without feedback decays to neutral and never improves
+- **Restart after skill additions** — MCP server caches skill list in memory
