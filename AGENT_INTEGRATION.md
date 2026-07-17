@@ -27,7 +27,7 @@ hermes mcp add skill-router --command python --args "path/to/mcp_server.py"
 ## Router (MANDATORY)
 Before replying to any substantive user message (not a correction or trivial reply):
 1. Call mcp__skill_router__route_skills with the user's query.
-2. Show the top 5 skills on one line: 🎯 Router: a, b, c, d, e
+2. Announce the skill you intend to use — the FIRST result is your pick
 3. If the call fails, continue silently. .
 
 After any task (5+ tool calls):
