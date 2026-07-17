@@ -12,8 +12,8 @@ Tools:
 import json, sys, os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from harness_g6 import route_g6, record_outcome, _load_json, _save_json
-from harness_g6 import HANDBOOK_PATH, HISTORY_PATH, POSTERIOR_PATH
+from harness_g1 import route_g6, record_outcome, get_skills, _load_json, _save_json
+from harness_g1 import HANDBOOK_PATH, HISTORY_PATH, POSTERIOR_PATH
 from datetime import datetime
 
 # ── MCP stdio transport (no external deps) ──────────────────────────────────
@@ -50,6 +50,7 @@ def tool_record_outcome(args: dict) -> str:
     return f"Recorded {status} for {skills} on query: \"{query[:60]}\""
 
 def tool_router_stats(args: dict) -> str:
+    get_skills()  # trigger fresh-install handbook sync before reading stats
     h = _load_json(HANDBOOK_PATH, {})
     p = _load_json(POSTERIOR_PATH, {})
     hist = _load_json(HISTORY_PATH, [])
