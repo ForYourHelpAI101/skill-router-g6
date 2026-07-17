@@ -1,26 +1,29 @@
 # Skill Router G6
 
-Self-learning skill router for AI agents. Model-agnostic MCP server.
+Self-learning skill router for AI agents. Model-agnostic MCP server. Two modes: harness injection (Ralph Loop) or direct MCP tool calls.
 
 ## Quick Start
 
-Add to any agent via MCP:
+### Harness Mode (recommended — zero model compliance needed)
+Wire into Hermes `config.yaml`:
+```yaml
+hooks:
+  pre_llm_call:
+    - command: "path/to/hermes_hook.py"
+```
+The harness calls `route_skills`, injects `🎯 Router:` into context. Model just displays it.
+
+### MCP Mode (all other agents)
 ```bash
-# Hermes
-hermes mcp add skill-router --command python --args "path/to/mcp_server.py"
-
-# Claude Code
 claude mcp add skill-router --command python --args "path/to/mcp_server.py"
-
-# Cursor / Windsurf / Codex — edit .mcp.json
 ```
 
-Add to your agent's instruction file:
+Instruction file for MCP mode:
 ```markdown
 ## Router (MANDATORY)
-Before replying to any substantive message (10+ words):
+Before replying to any substantive message:
 1. Call mcp__skill_router__route_skills with the user's query.
-2. Announce the skill you intend to use — the FIRST result is your pick
+2. Show: 🎯 Router: primary-skill (also: alt-1, alt-2, alt-3, alt-4)
 
 After any task (5+ tool calls):
 1. Call mcp__skill_router__record_outcome with: query, skills, success=true/false.
