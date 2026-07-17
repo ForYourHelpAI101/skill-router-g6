@@ -34,10 +34,10 @@ from typing import Optional
 # ─────────────────────────────────────────────────────────────────────────────
 # PATHS
 # ─────────────────────────────────────────────────────────────────────────────
-ROUTER_DIR    = Path(r"C:\Skill-Router G1")
-HERMES_HOME   = Path(os.path.expandvars(r"%APPDATA%")).parent / "Local" / "hermes"
-SKILLS_DIR    = HERMES_HOME / "skills"
-CACHE_DIR     = HERMES_HOME / ".router-cache"
+ROUTER_DIR    = Path(__file__).parent  # change to your install path
+SKILLS_HOME   = Path(os.path.expandvars(r"%APPDATA%")).parent / "Local" / "hermes"
+SKILLS_DIR    = SKILLS_HOME / "skills"
+CACHE_DIR     = SKILLS_HOME / ".router-cache"
 HANDBOOK_PATH = CACHE_DIR / "skill_handbook.json"
 HISTORY_PATH  = CACHE_DIR / "routing_history.json"
 POSTERIOR_PATH= CACHE_DIR / "skill_posteriors.json"
@@ -342,7 +342,7 @@ def record_outcome(query: str, skills_used: list, success: bool):
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# HERMES HOOK — pre_llm_call + post_task_complete
+# AGENT HOOK — pre_llm_call + post_task_complete
 # ─────────────────────────────────────────────────────────────────────────────
 def hook_main():
     try:

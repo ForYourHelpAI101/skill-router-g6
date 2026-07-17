@@ -4,12 +4,18 @@ Self-learning skill router for AI agents. Model-agnostic MCP server.
 
 ## Quick Start
 
+Add to any agent via MCP:
 ```bash
-# Example: Hermes Agent
+# Hermes
 hermes mcp add skill-router --command python --args "path/to/mcp_server.py"
+
+# Claude Code
+claude mcp add skill-router --command python --args "path/to/mcp_server.py"
+
+# Cursor / Windsurf / Codex — edit .mcp.json
 ```
 
-Add to `~/.hermes/SOUL.md`:
+Add to your agent's instruction file:
 ```markdown
 ## Router (MANDATORY)
 Before replying to any substantive message (10+ words):
@@ -38,14 +44,10 @@ Query → [RAG History] + [Keyword Match] + [BM25 Body Retrieval]
      [Thompson Boost]  ←  [Handbook Competence]
             ↓
      [DPP-Greedy Diversity] → Final top-5
+     ↓
+  FINAL GATE: validate all against handbook
 ```
 
-Self-learning: Beta posteriors per skill + handbook competence from task outcomes.
+Anti-hallucination: 5-layer defense. Self-learning: Beta posteriors from task outcomes.
 
-## Anti-Hallucination
-
-- Keyword patterns cross-checked against skill handbook
-- `record_outcome` never adds unknown skill names
-- Handbook rebuilt from verified SKILL.md files only
-
-See [AGENT_INTEGRATION.md](AGENT_INTEGRATION.md) for full setup across Claude Code, Cursor, Codex, Windsurf, Gemini CLI, and others.
+See [AGENT_INTEGRATION.md](AGENT_INTEGRATION.md) for full setup across all agents.
