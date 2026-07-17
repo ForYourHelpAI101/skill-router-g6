@@ -129,10 +129,12 @@ echo "[]" > ~/.hermes/.router-cache/routing_history.json
 
 ---
 
-## Anti-Hallucination Protections (v6.1)
+## Anti-Hallucination Protections (v6.2)
 
 | Layer | Protection |
 |-------|-----------|
+| Final gate | `route_g6` drops any skill not in handbook — last line of defense |
+| Body matching | `rank_by_body` cross-checks against handbook |
 | Keyword patterns | Cross-check against handbook before returning |
 | record_outcome | Only updates existing handbook entries — never adds unknowns |
 | Handbook | Rebuilt from SKILL.md files with content validation |
