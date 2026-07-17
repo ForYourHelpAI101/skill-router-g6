@@ -85,7 +85,7 @@ def tool_router_history(args: dict) -> str:
 TOOLS = {
     "route_skills": {
         "fn": tool_route_skills,
-        "description": "Find the best Hermes skills for a given task or user query using G6 agentic self-learning router",
+        "description": "Find the best skills for a given task or user query using G6 agentic self-learning router",
         "inputSchema": {
             "type": "object",
             "properties": {

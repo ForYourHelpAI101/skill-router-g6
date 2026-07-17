@@ -381,7 +381,7 @@ def record_outcome(query: str, skills_used: list, success: bool):
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# HERMES HOOK — pre_llm_call + post_task_complete
+# AGENT HOOK — pre_llm_call + post_task_complete
 # ─────────────────────────────────────────────────────────────────────────────
 def hook_main():
     try:
