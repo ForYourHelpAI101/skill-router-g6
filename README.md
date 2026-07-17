@@ -20,7 +20,7 @@ Add to your agent's instruction file:
 ## Router (MANDATORY)
 Before replying to any substantive message (10+ words):
 1. Call mcp__skill_router__route_skills with the user's query.
-2. Show the top 5 skills: 🎯 Router: a, b, c, d, e
+2. Announce the skill you intend to use — the FIRST result is your pick
 
 After any task (5+ tool calls):
 1. Call mcp__skill_router__record_outcome with: query, skills, success=true/false.
